@@ -1,0 +1,29 @@
+version: "1"
+
+package:
+  id: io.github.FreeJoyQt
+  name: FreeJoyQt
+  version: 1.7.1.1
+  kind: app
+  description: |
+    GUI utility for configuration and setting up FreeJoy embedded controller
+
+command:
+  - /opt/apps/io.github.FreeJoyQt/files/bin/FreeJoyQt
+
+base: org.deepin.foundation/23.0.0
+runtime: org.deepin.Runtime/23.0.1
+
+sources:
+  - kind: git
+    url: https://github.com/FreeJoy-Team/FreeJoyConfiguratorQt.git
+    version: master
+    commit: 0651652a53d1079f55cfcb22ac8d969a07bc7a4f
+
+build: |
+  cd /project/linglong/sources/FreeJoyConfiguratorQt.git
+  git apply ../../../0001-install.patch
+  cp src/Images/icon.png src/Images/FreeJoyQt.png
+  qmake -makefile PREFIX=${PREFIX} LIB_INSTALL_DIR=${PREFIX}/lib/${TRIPLET}
+  make -j$(nproc)
+  make install
